@@ -215,6 +215,7 @@ public class Prospector : MonoBehaviour {
 		//the reaction is determined by the state of the clicked card
 		switch (cd.state)
         {
+
 			case eCardState.target:
 				//clicking the target card does nothing
 				break;
@@ -247,6 +248,52 @@ public class Prospector : MonoBehaviour {
 				SetTableauFaces(); //Update tableau card face-ups
 				break;
         }
+		//check to see wheter the game is over or not
+		CheckForGameOver();
+    }
+
+	//test whether the game is over
+	void CheckForGameOver()
+    {
+		//if the tableau is empty, the game is over
+		if (tableau.Count == 0)
+        {
+			//CallGameOver() with a win
+			GameOver(true);
+			return;
+        }
+		// if there are still cards in the draw pile, the game's not over
+        if (drawPile.Count > 0)
+        {
+			return;
+        }
+
+		//check for remaining valid player
+		foreach (CardProspector cd in tableau)
+        {
+			if(AdjacentRank(cd, target))
+            {
+				//If there is a valid play, the game's not over
+				return;
+            }
+        }
+
+		GameOver(false);
+    }
+
+	//Called When the game is over. Simple for now but expandable
+	void GameOver(bool won)
+    {
+		if (won)
+        {
+			print("Game over. You won! : )");
+        }
+        else
+        {
+			print("Game Over. You Lose. :(");
+        }
+		//Reload the scene,resetting the game
+		SceneManager.LoadScene("__Prospector_Scene_0");
     }
 
 	//return true if the two cards are adjacent in rank (A & K wrap around)
