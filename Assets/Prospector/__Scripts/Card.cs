@@ -19,15 +19,7 @@ public class Card : MonoBehaviour {
 	public SpriteRenderer[] spriteRenderers;
 
 
-	public bool faceUp {
-		get {
-			return (!back.activeSelf);
-		}
 
-		set {
-			back.SetActive(!value);
-		}
-	}
 
 
 	// Use this for initialization
@@ -85,11 +77,28 @@ public class Card : MonoBehaviour {
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
+
+	public bool faceUp
+	{
+		get
+		{
+			return (!back.activeSelf);
+		}
+
+		set
+		{
+			back.SetActive(!value);
+		}
 	}
+
+	//Virtual Methods can be overridden by subclass methods with the same name
+	virtual public void OnMouseUpAsButton()
+    {
+		print(name); //When clicked, this outputs the card name
+    }
+
+
+
 } // class Card
 
 [System.Serializable]

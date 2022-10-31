@@ -25,4 +25,13 @@ public class CardProspector : Card
     public SlotDef slotDef;
     // Start is called before the first frame update
 
+    //This allows the card to react to being clicked
+    override public void OnMouseUpAsButton()
+    {
+        //Call the CardCliecked method on the Prospector singleton
+        Prospector.S.CardClicked(this);
+        //Also call the base class (card.cs) version of this method
+        base.OnMouseUpAsButton(); //a
+    }
+
 }
