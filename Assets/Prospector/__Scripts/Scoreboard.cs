@@ -79,6 +79,8 @@ public class Scoreboard : MonoBehaviour
         fs.Init(pts);
         return (fs);
     }
+
+    
     // Start is called before the first frame update
     void Start()
     {
