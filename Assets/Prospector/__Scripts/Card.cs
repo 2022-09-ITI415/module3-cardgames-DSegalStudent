@@ -65,7 +65,7 @@ public class Card : MonoBehaviour {
             //Switch based on the names
             switch (tSR.gameObject.name)
             {
-				case "black": //if the name is "black"
+				case "back": //if the name is "black"
 							  //Set it to the highest layer ot cover the other sprites
 					tSR.sortingOrder = sOrd + 2;
 					break;
