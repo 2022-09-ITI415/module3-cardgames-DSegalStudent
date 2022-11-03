@@ -13,10 +13,8 @@ public class Scoreboard : MonoBehaviour
     public GameObject prefabFloatingScore;
 
     [Header("Set Dynamically")]
-    [SerializeField] 
-    private int _score = 0;
-    [SerializeField] 
-    private string _scoreString;
+    [SerializeField] private int _score = 0;
+    [SerializeField] private string _scoreString;
 
     private Transform canvasTrans;
 
@@ -30,7 +28,7 @@ public class Scoreboard : MonoBehaviour
         set
         {
             _score = value;
-            _scoreString = _score.ToString("NO");
+            _scoreString = _score.ToString("N0");
         }
     }
 
@@ -83,15 +81,5 @@ public class Scoreboard : MonoBehaviour
     }
 
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
