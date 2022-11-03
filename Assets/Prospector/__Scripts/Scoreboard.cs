@@ -13,8 +13,10 @@ public class Scoreboard : MonoBehaviour
     public GameObject prefabFloatingScore;
 
     [Header("Set Dynamically")]
-    [SerializeField] private int _score = 0;
-    [SerializeField] private string _scoreString;
+    [SerializeField] 
+    private int _score = 0;
+    [SerializeField] 
+    private string _scoreString;
 
     private Transform canvasTrans;
 

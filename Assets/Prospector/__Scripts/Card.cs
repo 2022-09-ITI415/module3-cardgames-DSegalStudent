@@ -61,14 +61,15 @@ public class Card : MonoBehaviour {
 				tSR.sortingOrder = sOrd; // Set its order to sOrd
 				continue; //and continue to next interation of the loop
             }
-			//Each of the children of this GameObject are named
-			//Switch based on the names
-			switch (tSR.gameObject.name)
+            //Each of the children of this GameObject are named
+            //Switch based on the names
+            switch (tSR.gameObject.name)
             {
 				case "black": //if the name is "black"
 							  //Set it to the highest layer ot cover the other sprites
 					tSR.sortingOrder = sOrd + 2;
 					break;
+
 				case "face": //if the name is "face"
 				default: //or if its anything else
 						 //set it to the middle layer to be above the ground
