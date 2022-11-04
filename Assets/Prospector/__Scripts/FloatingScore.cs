@@ -17,7 +17,7 @@ public enum eFSState
 
 public class FloatingScore : MonoBehaviour
 {
-    [Header("Set Dynamicall")]
+    [Header("Set Dynamically")]
     public eFSState state = eFSState.idle;
 
     [SerializeField]

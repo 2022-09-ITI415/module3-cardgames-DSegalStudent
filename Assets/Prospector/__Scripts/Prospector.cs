@@ -159,6 +159,8 @@ public class Prospector : MonoBehaviour {
             }
         }
 
+		//(another for each loop for gold cards)
+
 		//set up initial target card
 		MoveToTarget(Draw());
 
@@ -295,6 +297,7 @@ public class Prospector : MonoBehaviour {
 				MoveToTarget(cd); // make it the target card
 				SetTableauFaces(); //Update tableau card face-ups
 				ScoreManager.EVENT(eScoreEvent.mine);
+				//AnotherScoreEvent.GoldMine?
 				FloatingScoreHandler(eScoreEvent.mine);
 				break;
         }
