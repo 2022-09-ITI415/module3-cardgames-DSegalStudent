@@ -48,7 +48,7 @@
 	<slot id="27" x="9"  y="-1" faceup="1" layer="3" hiddenby="7"/>
 	
 	<!-- Layer4, the top level. -->
-	<slot id="28" x="-9"  y="0" faceup="1" layer="4"/>
+	<slot id="28" x="-9"  y="0" faceup="1" layer="4" />
 	<slot id="29" x="-6"  y="0" faceup="1" layer="4" />
 	<slot id="30" x="-3"  y="0" faceup="1" layer="4" />
 	<slot id="31" x="0"  y="0" faceup="1" layer="4" />
