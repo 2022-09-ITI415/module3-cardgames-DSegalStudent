@@ -20,18 +20,19 @@ public class Golf : MonoBehaviour {
 	public Vector2 fsPosMid2 = new Vector2(0.4f, 1.0f);
 	public Vector2 fsPosEnd = new Vector2(0.5f, 0.95f);
 	public float reloadDelay = 2f; //2 sec delay between rounds
-	public Text gameOverText, roundResultText, highScoreText;
+	public Text gameOverText, roundResultText, highScoreText , HoleCounterText;
 
 
 	[Header("Set Dynamically")]
 	public Deck					deck;
 	public Layout layout;
-	public List<CardProspector> drawPile;
+	public List<CardGolf> drawPile;
 	public Transform layoutAnchor;
-	public CardProspector target;
-	public List<CardProspector> tableau;
-	public List<CardProspector> discardPile;
+	public CardGolf target;
+	public List<CardGolf> tableau;
+	public List<CardGolf> discardPile;
 	public FloatingScore fsRun;
+	public int hole = 1;
 
 
 	void Awake(){
@@ -63,6 +64,11 @@ public class Golf : MonoBehaviour {
         {
 			roundResultText = go.GetComponent<Text>();
         }
+		go = GameObject.Find("HoleCounter");
+		if(go != null)
+        {
+			HoleCounterText = go.GetComponent<Text>();
+        }
 
 		//Make the end of round texts invisible
 		ShowResultsUI(false);
@@ -90,26 +96,26 @@ public class Golf : MonoBehaviour {
 		layout = GetComponent<Layout>(); //get the Layout component
 		layout.ReadLayout(layoutXML.text); //Pass LayoutXML to it
 
-		drawPile = ConvertListCardsToListCardProspectors(deck.cards);
+		drawPile = ConvertListCardsToListCardGolfs(deck.cards);
 		LayoutGame();
 	}
 
-	List<CardProspector> ConvertListCardsToListCardProspectors(List<Card> lCD)
+	List<CardGolf> ConvertListCardsToListCardGolfs(List<Card> lCD)
     {
-		List<CardProspector> lCP = new List<CardProspector>();
-		CardProspector tCP;
+		List<CardGolf> lCP = new List<CardGolf>();
+		CardGolf tCP;
 		foreach(Card tCD in lCD)
         {
-			tCP = tCD as CardProspector; //a
+			tCP = tCD as CardGolf; //a
 			lCP.Add(tCP);
         }
 		return (lCP);
     }
 
 	//The Draw function will pull a single card from the drawPile and return it
-	CardProspector Draw()
+	CardGolf Draw()
     {
-		CardProspector cd = drawPile[0]; // Pull the 0th CardProspector
+		CardGolf cd = drawPile[0]; // Pull the 0th CardProspector
 		drawPile.RemoveAt(0); // then remove it from the List<> drawPile
 		return (cd); // and return it
     }
@@ -126,7 +132,7 @@ public class Golf : MonoBehaviour {
 			layoutAnchor.transform.position = layoutCenter; //Position it
         }
 
-		CardProspector cp;
+		CardGolf cp;
 		//Follow the layout
 		foreach (SlotDef tSD in layout.slotDefs)
         {
@@ -142,7 +148,7 @@ public class Golf : MonoBehaviour {
 			cp.layoutID = tSD.id;
 			cp.slotDef = tSD;
 			//CardProspectors in the tableau have the state CardState.tableau
-			cp.state = eCardState.tableau;
+			cp.state = eCardStateGolf.tableau;
 			//CardProspectors in the tableau have the state CardState.tableau
 			cp.SetSortingLayerName(tSD.layerName);
 
@@ -150,7 +156,7 @@ public class Golf : MonoBehaviour {
         }
 
 		//Set whcih cards are hiding others
-		foreach(CardProspector tCP in tableau)
+		foreach(CardGolf tCP in tableau)
         {
 			foreach(int hid in tCP.slotDef.hiddenBy)
             {
@@ -169,9 +175,9 @@ public class Golf : MonoBehaviour {
     }
 
 	//Convert from the layoutID int to the CardProspector with that ID
-	CardProspector FindCardByLayoutID(int layoutID)
+	CardGolf FindCardByLayoutID(int layoutID)
     {
-		foreach (CardProspector tCP in tableau)
+		foreach (CardGolf tCP in tableau)
         {
 			//Search through all cards in the tableau List<>
 			if (tCP.layoutID == layoutID)
@@ -187,13 +193,13 @@ public class Golf : MonoBehaviour {
 	//this turns cards in the Mine face-up or face-down
 	void SetTableauFaces()
     {
-		foreach(CardProspector cd in tableau)
+		foreach(CardGolf cd in tableau)
         {
 			bool faceUp = true; //Assume the card will be face-up
-			foreach (CardProspector cover in cd.hiddenBy)
+			foreach (CardGolf cover in cd.hiddenBy)
             {
 				//If either of the covering cards are in the tableau
-				if(cover.state == eCardState.tableau)
+				if(cover.state == eCardStateGolf.tableau)
                 {
 					faceUp = false; // then this card is face-down
                 }
@@ -203,10 +209,10 @@ public class Golf : MonoBehaviour {
     }
 
 	//Moves the current target to the discardPile
-	void MoveToDiscard(CardProspector cd)
+	void MoveToDiscard(CardGolf cd)
     {
 		//Set the state of the card to discard
-		cd.state = eCardState.discard;
+		cd.state = eCardStateGolf.discard;
 		discardPile.Add(cd); //Add it to the discardPile List<>
 		cd.transform.parent = layoutAnchor; //Update its transform parent
 
@@ -219,12 +225,12 @@ public class Golf : MonoBehaviour {
     }
 
 	//Make cd the new target card
-	void MoveToTarget(CardProspector cd)
+	void MoveToTarget(CardGolf cd)
     {
 		//If there is currently a target card, move it to the discardPile
 		if (target != null) MoveToDiscard(target);
 		target = cd; //cd is the new target
-		cd.state = eCardState.target;
+		cd.state = eCardStateGolf.target;
 		cd.transform.parent = layoutAnchor;
 		//Move to the target position
 		cd.transform.localPosition = new Vector3(layout.multiplier.x * layout.discardPile.x, layout.multiplier.y * layout.discardPile.y, -layout.discardPile.layerID);
@@ -238,7 +244,7 @@ public class Golf : MonoBehaviour {
 	//Arranges all the cards of the drawPile to show how many are left
 	void UpdateDrawPile()
     {
-		CardProspector cd;
+		CardGolf cd;
 		//Go Through all the cards of the drawPile
 		for(int i=0; i<drawPile.Count; i++)
         {
@@ -250,7 +256,7 @@ public class Golf : MonoBehaviour {
 			cd.transform.localPosition = new Vector3(layout.multiplier.x * (layout.drawPile.x + i * dpStagger.x), layout.multiplier.y * (layout.drawPile.y + i * dpStagger.y), -layout.drawPile.layerID + 0.1f * i);
 
 			cd.faceUp = false; // make them all face down
-			cd.state = eCardState.drawpile;
+			cd.state = eCardStateGolf.drawpile;
 			//set depth sorting
 			cd.SetSortingLayerName(layout.drawPile.layerName);
 			cd.SetSortOrder(-10 * i);
@@ -258,17 +264,17 @@ public class Golf : MonoBehaviour {
     }
 
 	//CardClicked is called any time a card in the game is clicked
-	public void CardClicked(CardProspector cd)
+	public void CardClicked(CardGolf cd)
     {
 		//the reaction is determined by the state of the clicked card
 		switch (cd.state)
         {
 
-			case eCardState.target:
+			case eCardStateGolf.target:
 				//clicking the target card does nothing
 				break;
 
-			case eCardState.drawpile:
+			case eCardStateGolf.drawpile:
 				//Clicking any card in the drawPile will drawt the next card
 				MoveToDiscard(target); //Moves the target to the discard pile
 				MoveToTarget(Draw()); // moves the next draw card to the target
@@ -277,7 +283,7 @@ public class Golf : MonoBehaviour {
 				FloatingScoreHandler(eScoreEvent.draw);
 				break;
 
-			case eCardState.tableau:
+			case eCardStateGolf.tableau:
 				//clicking a card in the tableau will check if its a valid play
 				bool validMatch = true;
 				if (!cd.faceUp)
@@ -296,9 +302,9 @@ public class Golf : MonoBehaviour {
 				tableau.Remove(cd); //Remove it from the tableau list
 				MoveToTarget(cd); // make it the target card
 				SetTableauFaces(); //Update tableau card face-ups
-				ScoreManager.EVENT(eScoreEvent.mine);
+				//ScoreManager.EVENT(eScoreEvent.mine);
 				//AnotherScoreEvent.GoldMine?
-				FloatingScoreHandler(eScoreEvent.mine);
+				//FloatingScoreHandler(eScoreEvent.mine);
 				break;
         }
 		//check to see wheter the game is over or not
@@ -322,7 +328,7 @@ public class Golf : MonoBehaviour {
         }
 
 		//check for remaining valid player
-		foreach (CardProspector cd in tableau)
+		foreach (CardGolf cd in tableau)
         {
 			if(AdjacentRank(cd, target))
             {
@@ -347,6 +353,10 @@ public class Golf : MonoBehaviour {
 			//print("Game over. You won! : )");
 			ScoreManager.EVENT(eScoreEvent.gameWin);
 			FloatingScoreHandler(eScoreEvent.gameWin);
+			if(hole < 9)
+            {
+				hole++;
+            }
 
         }
         else
@@ -356,6 +366,7 @@ public class Golf : MonoBehaviour {
             {
 				string str = "You got the high score!\nHigh score: " + score;
 				roundResultText.text = str;
+
             }
             else
             {
@@ -363,6 +374,7 @@ public class Golf : MonoBehaviour {
             }
 			ShowResultsUI(true);
 			//print("Game Over. You Lose. :(");
+			hole++;
 			ScoreManager.EVENT(eScoreEvent.gameLoss);
 			FloatingScoreHandler(eScoreEvent.gameLoss);
         }
@@ -382,7 +394,7 @@ public class Golf : MonoBehaviour {
     }
 
 	//return true if the two cards are adjacent in rank (A & K wrap around)
-	public bool AdjacentRank(CardProspector c0, CardProspector c1)
+	public bool AdjacentRank(CardGolf c0, CardGolf c1)
     {
 		//If either card is face-down, its not adjacent
 		if (!c0.faceUp || !c1.faceUp) return (false);
@@ -455,4 +467,6 @@ public class Golf : MonoBehaviour {
 				break;
         }
     }
+
+	
 }
