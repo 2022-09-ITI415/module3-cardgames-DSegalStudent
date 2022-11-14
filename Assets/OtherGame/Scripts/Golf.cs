@@ -306,9 +306,9 @@ public class Golf : MonoBehaviour {
 				tableau.Remove(cd); //Remove it from the tableau list
 				MoveToTarget(cd); // make it the target card
 				SetTableauFaces(); //Update tableau card face-ups
-				//ScoreManager.EVENT(eScoreEvent.mine);
+				//ScoreManagerGolf.EVENT(eScoreEventGolf.mine);
 				//AnotherScoreEvent.GoldMine?
-				//FloatingScoreHandler(eScoreEvent.mine);
+				//FloatingScoreHandler(eScoreEventGolf.mine);
 				break;
         }
 		//check to see wheter the game is over or not
@@ -348,7 +348,8 @@ public class Golf : MonoBehaviour {
 	void GameOver(bool won)
     {
 		int score = ScoreManagerGolf.SCORE;
-		if (fsRun != null) score += fsRun.score;
+		//if (fsRun != null) score += fsRun.score;
+		score += tableau.Count;
 		if (won)
         {
 			gameOverText.text = "Round Over";
@@ -357,6 +358,7 @@ public class Golf : MonoBehaviour {
 			//print("Game over. You won! : )");
 			ScoreManagerGolf.EVENT(eScoreEventGolf.gameWin);
 			FloatingScoreHandler(eScoreEventGolf.gameWin);
+			
 
 
         }

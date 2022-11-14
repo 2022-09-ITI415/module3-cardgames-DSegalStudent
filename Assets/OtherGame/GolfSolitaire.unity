@@ -343,7 +343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 888.2007, y: -151.12549}
+  m_AnchoredPosition: {x: 158, y: -84.4}
   m_SizeDelta: {x: 270.4014, y: 116.2511}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &539721278
@@ -649,8 +649,8 @@ GameObject:
   - component: {fileID: 827460509}
   - component: {fileID: 827460514}
   - component: {fileID: 827460516}
-  - component: {fileID: 827460517}
   - component: {fileID: 827460518}
+  - component: {fileID: 827460519}
   m_Layer: 0
   m_Name: _MainCamera
   m_TagString: MainCamera
@@ -835,21 +835,6 @@ MonoBehaviour:
   - Row3
   - Discard
   - Draw
---- !u!114 &827460517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 827460508}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa6d973573781b349b7fbcdca4feb379, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  chain: 0
-  scoreRun: 0
-  score: 0
 --- !u!114 &827460518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -885,6 +870,21 @@ MonoBehaviour:
   discardPile: []
   fsRun: {fileID: 0}
   hole: 0
+--- !u!114 &827460519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827460508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a16aa217095f984e95ccfccb4ceb5f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chain: 0
+  scoreRun: 0
+  score: 0
 --- !u!1 &1092932317
 GameObject:
   m_ObjectHideFlags: 0
