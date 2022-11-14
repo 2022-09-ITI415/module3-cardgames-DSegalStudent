@@ -82,15 +82,13 @@ public class Golf : MonoBehaviour {
     }
 
 	void Start() {
-		Scoreboard.S.score = ScoreManager.SCORE;
+		Scoreboard.S.score = ScoreManagerGolf.SCORE;
 		deck = GetComponent<Deck>();
 		deck.InitDeck (deckXML.text);
 		Deck.Shuffle(ref deck.cards);
-		if(hole == 0)
-        {
-			hole++;
-        }
-		HoleCounterText.text = "Hole: " + hole ;
+		hole = ScoreManagerGolf.hole;
+		HoleCounterText.text = "Hole: " + hole;
+
 		
 
 		//Card c;
@@ -285,8 +283,8 @@ public class Golf : MonoBehaviour {
 				MoveToDiscard(target); //Moves the target to the discard pile
 				MoveToTarget(Draw()); // moves the next draw card to the target
 				UpdateDrawPile(); //Restacks the draw pile
-				ScoreManager.EVENT(eScoreEvent.draw);
-				FloatingScoreHandler(eScoreEvent.draw);
+				ScoreManagerGolf.EVENT(eScoreEventGolf.draw);
+				FloatingScoreHandler(eScoreEventGolf.draw);
 				break;
 
 			case eCardStateGolf.tableau:
@@ -349,7 +347,7 @@ public class Golf : MonoBehaviour {
 	//Called When the game is over. Simple for now but expandable
 	void GameOver(bool won)
     {
-		int score = ScoreManager.SCORE;
+		int score = ScoreManagerGolf.SCORE;
 		if (fsRun != null) score += fsRun.score;
 		if (won)
         {
@@ -357,36 +355,33 @@ public class Golf : MonoBehaviour {
 			roundResultText.text = "You won this round!\nRound Score: " + score;
 			ShowResultsUI(true);
 			//print("Game over. You won! : )");
-			ScoreManager.EVENT(eScoreEvent.gameWin);
-			FloatingScoreHandler(eScoreEvent.gameWin);
-			if(hole < 9)
-            {
-				hole++;
-				HoleCounterText.text = "Hole: " + hole;
-            }
+			ScoreManagerGolf.EVENT(eScoreEventGolf.gameWin);
+			FloatingScoreHandler(eScoreEventGolf.gameWin);
+
 
         }
         else
         {
 			gameOverText.text = "Game Over";
-			if(ScoreManager.HIGH_SCORE <= score)
+			if(ScoreManagerGolf.HIGH_SCORE <= score)
             {
 				string str = "You got the high score!\nHigh score: " + score;
 				roundResultText.text = str;
-				hole++;
+				
 				HoleCounterText.text = "Hole: " + hole;
 
+
             }
-            else if (hole >=9)
+            else 
             {
 				roundResultText.text = "Your final score was: " + score;
-				hole = 1;
+				
             }
 			ShowResultsUI(true);
 			//print("Game Over. You Lose. :(");
-			hole++;
-			ScoreManager.EVENT(eScoreEvent.gameLoss);
-			FloatingScoreHandler(eScoreEvent.gameLoss);
+	
+			ScoreManagerGolf.EVENT(eScoreEventGolf.gameLoss);
+			FloatingScoreHandler(eScoreEventGolf.gameLoss);
         }
 		//Reload the scene,resetting the game
 		//SceneManager.LoadScene("__Prospector_Scene_0");
@@ -401,7 +396,7 @@ public class Golf : MonoBehaviour {
     {
 		//reload the scene, resetting the game
 		SceneManager.LoadScene("GolfSolitaire");
-		HoleCounterText.text = "Hole: test" + hole;
+		
     }
 
 	//return true if the two cards are adjacent in rank (A & K wrap around)
@@ -426,15 +421,15 @@ public class Golf : MonoBehaviour {
 
 
 	//Handle FloatingScore movement
-	void FloatingScoreHandler(eScoreEvent evt)
+	void FloatingScoreHandler(eScoreEventGolf evt)
     {
 		List<Vector2> fsPts;
 		switch (evt)
         {
 			//Same things need to happen whether its a draw, a win, or a loss
-			case eScoreEvent.draw: //Drawing a card
-			case eScoreEvent.gameWin: // Won the round
-			case eScoreEvent.gameLoss: //Lost the round
+			case eScoreEventGolf.draw: //Drawing a card
+			case eScoreEventGolf.gameWin: // Won the round
+			case eScoreEventGolf.gameLoss: //Lost the round
 			//Add fsRun to the Scoreboard score
 			if (fsRun != null)
                 {
@@ -453,7 +448,7 @@ public class Golf : MonoBehaviour {
                 }
 				break;
 
-			case eScoreEvent.mine: // Remove a mine card
+			case eScoreEventGolf.mine: // Remove a mine card
 								   //Create a FloatingScore for this score
 				FloatingScore fs;
 				//ove it from the mousePosition to fsPosRun
@@ -464,7 +459,7 @@ public class Golf : MonoBehaviour {
 				fsPts.Add(p0);
 				fsPts.Add(fsPosMid);
 				fsPts.Add(fsPosRun);
-				fs = Scoreboard.S.CreateFloatingScore(ScoreManager.CHAIN, fsPts);
+				fs = Scoreboard.S.CreateFloatingScore(ScoreManagerGolf.CHAIN, fsPts);
 				fs.fontSizes = new List<float>(new float[] { 4, 50, 28 });
 				if (fsRun == null)
                 {
