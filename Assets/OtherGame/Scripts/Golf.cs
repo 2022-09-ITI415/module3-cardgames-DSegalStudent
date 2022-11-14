@@ -32,12 +32,13 @@ public class Golf : MonoBehaviour {
 	public List<CardGolf> tableau;
 	public List<CardGolf> discardPile;
 	public FloatingScore fsRun;
-	public int hole = 1;
+	public int hole;
 
 
 	void Awake(){
 		S = this;
 		SetUpUITexts();
+		
 	}
 
 	void SetUpUITexts()
@@ -85,6 +86,11 @@ public class Golf : MonoBehaviour {
 		deck = GetComponent<Deck>();
 		deck.InitDeck (deckXML.text);
 		Deck.Shuffle(ref deck.cards);
+		if(hole == 0)
+        {
+			hole++;
+        }
+		HoleCounterText.text = "Hole: " + hole ;
 		
 
 		//Card c;
@@ -356,6 +362,7 @@ public class Golf : MonoBehaviour {
 			if(hole < 9)
             {
 				hole++;
+				HoleCounterText.text = "Hole: " + hole;
             }
 
         }
@@ -366,11 +373,14 @@ public class Golf : MonoBehaviour {
             {
 				string str = "You got the high score!\nHigh score: " + score;
 				roundResultText.text = str;
+				hole++;
+				HoleCounterText.text = "Hole: " + hole;
 
             }
-            else
+            else if (hole >=9)
             {
 				roundResultText.text = "Your final score was: " + score;
+				hole = 1;
             }
 			ShowResultsUI(true);
 			//print("Game Over. You Lose. :(");
@@ -390,7 +400,8 @@ public class Golf : MonoBehaviour {
 	void ReloadLevel()
     {
 		//reload the scene, resetting the game
-		SceneManager.LoadScene("__Prospector_Scene_0");
+		SceneManager.LoadScene("GolfSolitaire");
+		HoleCounterText.text = "Hole: test" + hole;
     }
 
 	//return true if the two cards are adjacent in rank (A & K wrap around)
