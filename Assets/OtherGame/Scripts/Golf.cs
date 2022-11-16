@@ -20,7 +20,7 @@ public class Golf : MonoBehaviour {
 	public Vector2 fsPosMid2 = new Vector2(0.4f, 1.0f);
 	public Vector2 fsPosEnd = new Vector2(0.5f, 0.95f);
 	public float reloadDelay = 2f; //2 sec delay between rounds
-	public Text gameOverText, roundResultText, highScoreText , HoleCounterText;
+	public Text gameOverText, roundResultText, highScoreText , HoleCounterText, OverallScoreText;
 
 
 	[Header("Set Dynamically")]
@@ -33,6 +33,7 @@ public class Golf : MonoBehaviour {
 	public List<CardGolf> discardPile;
 	public FloatingScore fsRun;
 	public int hole;
+	public int OverallScore;
 
 
 	void Awake(){
@@ -70,6 +71,11 @@ public class Golf : MonoBehaviour {
         {
 			HoleCounterText = go.GetComponent<Text>();
         }
+		go = GameObject.Find("NewScore");
+		if(go != null)
+        {
+			OverallScoreText = go.GetComponent<Text>();
+        }
 
 		//Make the end of round texts invisible
 		ShowResultsUI(false);
@@ -88,6 +94,19 @@ public class Golf : MonoBehaviour {
 		Deck.Shuffle(ref deck.cards);
 		hole = ScoreManagerGolf.hole;
 		HoleCounterText.text = "Hole: " + hole;
+
+		if (PlayerPrefs.HasKey("OverallScore"))
+		{
+			OverallScore = PlayerPrefs.GetInt("OverallScore");
+		}
+		if (hole == 1)
+        {
+			OverallScore = 0;
+        }
+		
+		
+
+		OverallScoreText.text = OverallScore.ToString();
 
 		
 
@@ -350,6 +369,7 @@ public class Golf : MonoBehaviour {
 		int score = ScoreManagerGolf.SCORE;
 		//if (fsRun != null) score += fsRun.score;
 		score += tableau.Count;
+		OverallScore += tableau.Count;
 		if (won)
         {
 			gameOverText.text = "Round Over";
@@ -358,10 +378,12 @@ public class Golf : MonoBehaviour {
 			//print("Game over. You won! : )");
 			ScoreManagerGolf.EVENT(eScoreEventGolf.gameWin);
 			FloatingScoreHandler(eScoreEventGolf.gameWin);
-			
+			PlayerPrefs.SetInt("OverallScore", OverallScore);
+			OverallScoreText.text = OverallScore.ToString();
 
 
-        }
+
+		}
         else
         {
 			gameOverText.text = "Game Over";
@@ -372,13 +394,17 @@ public class Golf : MonoBehaviour {
 				
 				HoleCounterText.text = "Hole: " + hole;
 
+				PlayerPrefs.SetInt("OverallScore", OverallScore);
+				OverallScoreText.text = OverallScore.ToString();
 
-            }
+			}
             else 
             {
 				roundResultText.text = "Your final score was: " + score;
-				
-            }
+
+				PlayerPrefs.SetInt("OverallScore", OverallScore);
+				OverallScoreText.text = OverallScore.ToString();
+			}
 			ShowResultsUI(true);
 			//print("Game Over. You Lose. :(");
 	
