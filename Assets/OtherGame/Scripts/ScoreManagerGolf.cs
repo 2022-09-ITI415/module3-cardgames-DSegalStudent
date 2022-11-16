@@ -100,7 +100,7 @@ public class ScoreManagerGolf : MonoBehaviour
                 break;
             case eScoreEventGolf.gameLoss:
                 //If Loss, check against the high score
-                if(HIGH_SCORE >= score)
+                if(HIGH_SCORE >= score || score == 0)
                 {
                     print("You got the high score! High Score: " + score);
                     HIGH_SCORE = score;

@@ -50,7 +50,7 @@ public class Golf : MonoBehaviour {
         {
 			highScoreText = go.GetComponent<Text>();
         }
-		int highScore = ScoreManager.HIGH_SCORE;
+		int highScore = ScoreManagerGolf.HIGH_SCORE;
 		string hScore = "High Score: " + Utils.AddCommasToNumber(highScore);
 		go.GetComponent<Text>().text = hScore;
 
@@ -387,7 +387,7 @@ public class Golf : MonoBehaviour {
         else
         {
 			gameOverText.text = "Game Over";
-			if(ScoreManagerGolf.HIGH_SCORE <= score)
+			if (ScoreManagerGolf.HIGH_SCORE >= score || score == 0) 
             {
 				string str = "You got the high score!\nHigh score: " + score;
 				roundResultText.text = str;
