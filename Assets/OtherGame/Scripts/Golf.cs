@@ -387,7 +387,7 @@ public class Golf : MonoBehaviour {
         else
         {
 			gameOverText.text = "Game Over";
-			if (ScoreManagerGolf.HIGH_SCORE >= score || score == 0) 
+			if (ScoreManagerGolf.HIGH_SCORE >= score) 
             {
 				string str = "You got the high score!\nHigh score: " + score;
 				roundResultText.text = str;

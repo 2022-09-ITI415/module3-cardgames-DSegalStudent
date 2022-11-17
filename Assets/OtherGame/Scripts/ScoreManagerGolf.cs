@@ -25,6 +25,7 @@ public class ScoreManagerGolf : MonoBehaviour
     public int chain = 0;
     public int scoreRun = 0;
     public int score = 0;
+    
 
     private void Awake()
     {
@@ -100,14 +101,14 @@ public class ScoreManagerGolf : MonoBehaviour
                 break;
             case eScoreEventGolf.gameLoss:
                 //If Loss, check against the high score
-                if(HIGH_SCORE >= score || score == 0)
+                if(HIGH_SCORE >= score )
                 {
                     print("You got the high score! High Score: " + score);
                     HIGH_SCORE = score;
                     PlayerPrefs.SetInt("ProspectorHighScore", score);
                     if (hole <= 8)
                     {
-                        hole = hole + 1;
+                        hole = hole + 1 - 1;
                         PlayerPrefs.SetInt("GolfHole", hole);
                     }
                     else
