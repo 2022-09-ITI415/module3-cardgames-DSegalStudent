@@ -23,7 +23,7 @@ public class Deck : MonoBehaviour {
 
 	// Prefabs
 	public GameObject prefabSprite;
-	public GameObject prefabCard;
+	public GameObject prefabCard; 
 
 	[Header("Set Dynamically")]
 
